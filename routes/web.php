@@ -57,4 +57,4 @@ Route::group(['middleware' => 'auth'], function () {
   
   
     Route::get('payment', ['as' => 'pages.payment', 'uses' => 'App\Http\Controllers\PageController@payment']);
-    
+});   

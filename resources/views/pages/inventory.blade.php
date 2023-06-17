@@ -35,12 +35,6 @@
                     <td>
                         <!-- Add buttons for edit and delete -->
                         <button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#editProductModal" data-product-id="{{ $product->ProductID }}">Edit</button>
-                        {{-- <form action="" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form> --}}
-                        {{-- delete --}}
                         <form method="POST" style="display: inline;" action="{{ route('products.destroy', ['product' => $product->ProductID]) }}">
                             @csrf
                             @method('DELETE')
@@ -153,11 +147,13 @@ aria-hidden="true">
             type: 'GET',
             success: function(response) {
                 // Populate the modal content with the fetched data
+                $('#editProductForm').html(response);
                 $('#editProductInventoryDate').val(response.InventoryDate);
                 $('#editProductProductName').val(response.ProductName);
                 $('#editProductProductDesc').val(response.ProductDesc);
                 $('#editProductProductPrice').val(response.ProductPrice);
                 $('#editProductProductQuantity').val(response.ProductQuantity);
+                
             },
             error: function(xhr, status, error) {
                 // Handle the error

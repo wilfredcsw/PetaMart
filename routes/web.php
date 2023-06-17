@@ -32,10 +32,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Add the following route for storing a product
     Route::post('products', [App\Http\Controllers\InventoryController::class, 'store'])->name('products.store');
-    Route::post('products', ['as' => 'products.store', 'uses' => 'App\Http\Controllers\InventoryController@store']);
+    Route::post('products', ['as' => 'products.store', 'uses' => 'App\Http\Controllers\inventorycontroller@store']);
     Route::get('products/{id}/edit', [InventoryController::class, 'edit'])->name('products.edit');
     Route::put('products/{id}', [InventoryController::class, 'update'])->name('products.update');
     Route::delete('products/{product}', [App\Http\Controllers\InventoryController::class, 'destroy'])->name('products.destroy');
-
-
+    
 });

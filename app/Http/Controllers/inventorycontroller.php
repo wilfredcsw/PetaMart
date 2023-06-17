@@ -14,6 +14,12 @@ class inventorycontroller extends Controller
         return view('pages.inventory', compact('products'));
     }
 
+    public function addtocart()
+    {
+        $products = Product::all();
+        return view('pages.payment', compact('products'));
+    }
+
     /**
      * Store a newly created product in the database.
      *

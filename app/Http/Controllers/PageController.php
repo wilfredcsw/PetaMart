@@ -35,12 +35,22 @@ class PageController extends Controller
     }
 
     /**
-     * Display product page
+     * Display payment page
      *
      * @return \Illuminate\View\View
      */
     public function payment()
     {
         return view('pages.payment');
+    }
+
+    /**
+     * Display sales page
+     *
+     * @return \Illuminate\View\View
+     */
+    public function sales()
+    {
+        return view('pages.sales');
     }
 }

@@ -11,7 +11,7 @@ class inventorycontroller extends Controller
 {
     public function index()
     {
-        $products = Product::orderBy('ProductID', 'desc')->get();
+        $products = Product::all();
         return view('pages.inventory', compact('products'));
     }
 

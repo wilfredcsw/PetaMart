@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
-
+use App\Http\Controllers\AnnouncementController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,7 +24,13 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('inventory', ['as' => 'pages.inventory', 'uses' => 'App\Http\Controllers\PageController@inventory']);
-    Route::get('announcement', ['as' => 'pages.announcement', 'uses' => 'App\Http\Controllers\PageController@announcement']);
+
+    Route::get('announcement', ['as' => 'pages.announcement', 'uses' => 'App\Http\Controllers\AnnouncementController@index']);
+    Route::post('announcement', [App\Http\Controllers\AnnouncementController::class, 'store'])->name('announcements.store');
+    Route::delete('announcement/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+    Route::put('announcement/{announcement}', [AnnouncementController::class, 'update'])->name('announcements.update');
+
+
     Route::get('schedule', ['as' => 'pages.schedule', 'uses' => 'App\Http\Controllers\PageController@schedule']);
     Route::get('payment', ['as' => 'pages.payment', 'uses' => 'App\Http\Controllers\PageController@payment']);
 
@@ -32,5 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Add the following route for storing a product
     Route::post('products', [App\Http\Controllers\InventoryController::class, 'store'])->name('products.store');
-    
+    // Route for displaying the announcement index page
+
+
 });

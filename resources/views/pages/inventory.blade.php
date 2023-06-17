@@ -64,7 +64,7 @@ aria-hidden="true">
                 <form id="addProductForm" action="{{ route('products.store') }}" method="POST">
                     @csrf
 
-                    {{-- <div class="form-group">
+                    <div class="form-group">
                         <label for="inventory_id">Inventory ID:</label>
                         <input type="text" name="inventory_id" id="inventory_id" class="form-control">
                     </div>
@@ -72,7 +72,7 @@ aria-hidden="true">
                     <div class="form-group">
                         <label for="product_id">Product ID:</label>
                         <input type="text" name="product_id" id="product_id" class="form-control">
-                    </div> --}}
+                    </div>
 
                     <div class="form-group">
                         <label for="inventory_date">Inventory Date:</label>

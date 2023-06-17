@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedule', function (Blueprint $table) {
-            $table->id();
+        Schema::create('schedules', function (Blueprint $table) {
+            $table->increments('ScheduleID');
+            $table->string('ScheduleTitle');
+            $table->date('WorkingDate');
+            $table->time('WorkingTime');
+            $table->string('AssignUser');
             $table->timestamps();
+
         });
     }
 

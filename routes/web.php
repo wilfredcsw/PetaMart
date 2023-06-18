@@ -8,6 +8,7 @@ use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\inventorycontroller;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +37,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('sales', ['as' => 'pages.sales', 'uses' => 'App\Http\Controllers\PageController@sales']);
     Route::get('sales', ['as' => 'pages.sales', 'uses' => 'App\Http\Controllers\SalesController@index']);
     // Route::get('payment', ['as' => 'pages.payment', 'uses' => 'App\Http\Controllers\PaymentController@index']);
-
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
     Route::get('/payment', 'App\Http\Controllers\PaymentController@index');
 
@@ -48,21 +48,17 @@ Route::group(['middleware' => 'auth'], function () {
     
     //inventory parts dont touch
     Route::get('inventory', ['as' => 'pages.inventory', 'uses' => 'App\Http\Controllers\InventoryController@index']);
-    Route::get('inventory', ['as' => 'pages.inventory', 'uses' => 'App\Http\Controllers\PageController@inventory']);
     // Add the following route for storing a product
-    Route::post('products', [App\Http\Controllers\InventoryController::class, 'store'])->name('products.store');
+    Route::post('products', [App\Http\Controllers\inventorycontroller::class, 'store'])->name('products.store');
     Route::post('products', ['as' => 'products.store', 'uses' => 'App\Http\Controllers\inventorycontroller@store']);
-    Route::get('products/{id}/edit', [InventoryController::class, 'edit'])->name('products.edit');
-    Route::put('products/{id}', [InventoryController::class, 'update'])->name('products.update');
-    Route::delete('products/{product}', [App\Http\Controllers\InventoryController::class, 'destroy'])->name('products.destroy');
+    Route::get('products/{id}/edit', [inventorycontroller::class, 'edit'])->name('products.edit');
+    // Route::get('products/{product}', [App\Http\Controllers\inventorycontroller::class, 'edit'])->name('products.edit');
+    Route::put('products/{id}', [inventorycontroller::class, 'update'])->name('products.update');
+    Route::delete('products/{product}', [App\Http\Controllers\inventorycontroller::class, 'destroy'])->name('products.destroy');
 
     //schedule parts
     Route::post('schedule', [App\Http\Controllers\ScheduleController::class, 'store'])->name('schedule.store');
     Route::get('schedule', ['as' => 'pages.schedule', 'uses' => 'App\Http\Controllers\ScheduleController@index']);
     Route::delete('schedule/{schedule}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
     Route::put('schedule/{schedule}', [ScheduleController::class, 'update'])->name('schedules.update');
-    Route::get('schedule', ['as' => 'pages.schedule', 'uses' => 'App\Http\Controllers\PageController@schedule']);
-  
-  
-    Route::get('payment', ['as' => 'pages.payment', 'uses' => 'App\Http\Controllers\PageController@payment']);
 });   

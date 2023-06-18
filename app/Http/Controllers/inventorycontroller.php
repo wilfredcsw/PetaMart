@@ -15,12 +15,6 @@ class inventorycontroller extends Controller
         return view('pages.inventory', compact('products'));
     }
 
-    public function addtocart()
-    {
-        $products = Product::all();
-        return view('pages.payment', compact('products'));
-    }
-
     /**
      * Store a newly created product in the database.
      *
@@ -50,31 +44,49 @@ class inventorycontroller extends Controller
     // Edit Controller Method
     public function edit($id)
     {
+        DB::enableQueryLog();
         // $product = Product::findOrFail($id);
         $product = Product::find($id);
-        return view('pages.inventory-edit', compact('product'));
+        dd(DB::getQueryLog());
+        return $product;
     }
 
     // Update Controller Method
     public function update(Request $request, $id)
     {
+        DB::enableQueryLog();
+
         // Validate the form data
         $validatedData = $request->validate([
-            'inventory_date' => 'required|date',
-            'product_name' => 'required|string|max:50',
-            'product_desc' => 'required|string|max:500',
-            'product_price' => 'required|numeric',
-            'product_quantity' => 'required|integer',
+            'InventoryDate' => 'required|date',
+            'ProductName' => 'required|string|max:50',
+            'ProductDesc' => 'required|string|max:500',
+            'ProductPrice' => 'required|numeric',
+            'ProductQuantity' => 'required|integer',
         ]);
 
-        $validatedData['total_price'] = $validatedData['product_price'] * $validatedData['product_quantity'];
+        dd($validatedData);
 
-        // Find the product by ProjectID
-        // $product = Product::findOrFail($ProjectID);
-        $product = Product::where('ProductID', $id)->first();
+        // $validatedData['TotalPrice'] = $validatedData['ProductPrice'] * $validatedData['ProductQuantity'];
+        $totalPrice = $validatedData['ProductPrice'] * $validatedData['ProductQuantity'];
+
+        // Find the product by ProductID
+        // $product = Product::findOrFail($id);
+        // $product = Product::where('ProductID', $id)->first();
+        $product = Product::find($id);
+        dd($product);
+        $product->InventoryDate = $request->input('editProductInventoryDate');
+        $product->ProductName = $request->input('editProductProductName');
+        $product->ProductDesc = $request->input('editProductProductDesc');
+        $product->ProductPrice = $request->input('editProductProductPrice');
+        $product->ProductQuantity = $request->input('editProductProductQuantity');
+        $product->TotalPrice = $totalPrice;
+        $product->update();
 
         // Update the product with the validated data
-        $product->update($validatedData);
+        // $product->update($validatedData);
+
+        dd(DB::getQueryLog());
 
         // Redirect back to the inventory page with a success message
         return redirect()->route('pages.inventory')->with('success', 'Product updated successfully!');

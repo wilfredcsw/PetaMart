@@ -25,16 +25,21 @@
             <!-- Loop through the products and display each row -->
             @foreach($products as $product)
                 <tr>
-                    <td>{{ $product->ProductID }}</td>
-                    <td>{{ $product->InventoryDate }}</td>
-                    <td>{{ $product->ProductName }}</td>
-                    <td>{{ $product->ProductDesc }}</td>
-                    <td>{{ $product->ProductPrice }}</td>
-                    <td>{{ $product->ProductQuantity }}</td>
+                    <td class="tbl-product-id">{{ $product->ProductID }}</td>
+                    <td class="tbl-inventory-date">{{ $product->InventoryDate }}</td>
+                    <td class="tbl-product-name">{{ $product->ProductName }}</td>
+                    <td class="tbl-product-desc">{{ $product->ProductDesc }}</td>
+                    <td class="tbl-product-price">{{ $product->ProductPrice }}</td>
+                    <td class="tbl-product-quantity">{{ $product->ProductQuantity }}</td>
                     <td>{{ $product->TotalPrice }}</td>
                     <td>
                         <!-- Add buttons for edit and delete -->
-                        <button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#editProductModal" data-product-id="{{ $product->ProductID }}">Edit</button>
+                        {{-- <form method="GET" style="display: inline;" action="{{ route('products.edit', ['product' => $product->ProductID]) }}">
+                            @csrf
+                            @method('GET')
+                            <button type="submit" class="btn btn-primary edit-btn">Edit</button>
+                        </form> --}}
+                        <button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#editProductModal" data-product-id="{{ $product->ProductID }}" onclick="{{ $selectedProduct = $product->ProductID }}">Edit{{ $product->ProductID }}</button>
                         <form method="POST" style="display: inline;" action="{{ route('products.destroy', ['product' => $product->ProductID]) }}">
                             @csrf
                             @method('DELETE')
@@ -102,28 +107,30 @@ aria-hidden="true">
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editProductForm" action="{{ route('products.update', ['id' => $product->ProductID]) }}" method="POST">
+                <form id="editProductForm" action="{{ route('products.update', ['id' => $selectedProduct]) }}" method="post">
+                    {{-- <p>{{ route('products.update', ['id' => $selectedProduct]) }}</p> --}}
+                <!-- <form id="editProductForm" action="" method="PUT"> -->
                     @csrf
                     @method('PUT')
                     <div class="form-group">
-                        <label for="editProductInventoryDate">Inventory Date</label>
-                        <input type="date" class="form-control" id="editProductInventoryDate" name="inventory_date" value="{{ $product->InventoryDate }}">
+                        <label for="editProductInventoryDateLabel">Inventory Date</label>
+                        <input type="date" class="form-control" id="editProductInventoryDate" name="inventory_date" value="">
                     </div>
                     <div class="form-group">
-                        <label for="editProductProductName">Product Name</label>
-                        <input type="text" class="form-control" id="editProductProductName" name="product_name" value="{{ $product->ProductName }}">
+                        <label for="editProductProductNameLabel">Product Name</label>
+                        <input type="text" class="form-control" id="editProductProductName" name="product_name" value="">
                     </div>
                     <div class="form-group">
-                        <label for="editProductProductDesc">Product Description</label>
-                        <textarea class="form-control" id="editProductProductDesc" name="product_desc">{{ $product->ProductDesc }}</textarea>
+                        <label for="editProductProductDescLabel">Product Description</label>
+                        <textarea class="form-control" id="editProductProductDesc" name="product_desc"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="editProductProductPrice">Product Price</label>
-                        <input type="number" step="0.01" class="form-control" id="editProductProductPrice" name="product_price" value="{{ $product->ProductPrice }}">
+                        <label for="editProductProductPriceLabel">Product Price</label>
+                        <input type="number" step="0.01" class="form-control" id="editProductProductPrice" name="product_price" value="">
                     </div>
                     <div class="form-group">
-                        <label for="editProductProductQuantity">Product Quantity</label>
-                        <input type="number" class="form-control" id="editProductProductQuantity" name="product_quantity" value="{{ $product->ProductQuantity }}">
+                        <label for="editProductProductQuantityLabel">Product Quantity</label>
+                        <input type="number" class="form-control" id="editProductProductQuantity" name="product_quantity" value="">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -138,32 +145,53 @@ aria-hidden="true">
 @endsection
 
 @section('scripts')
+@push('header-scripts')
 <script>
     $(document).ready(function() {
+        console.log('ready on inventory');
     $('.edit-btn').click(function() {
         var productId = $(this).data('product-id');
-        $.ajax({
-            url: '/products/' + productId + '/edit',
-            type: 'GET',
-            success: function(response) {
-                // Populate the modal content with the fetched data
-                $('#editProductForm').html(response);
-                $('#editProductInventoryDate').val(response.InventoryDate);
-                $('#editProductProductName').val(response.ProductName);
-                $('#editProductProductDesc').val(response.ProductDesc);
-                $('#editProductProductPrice').val(response.ProductPrice);
-                $('#editProductProductQuantity').val(response.ProductQuantity);
+        console.log('productId ',productId);
+
+        var productName = $(this).parent().siblings('.tbl-product-name').html();
+        var inventoryDate = $(this).parent().siblings('.tbl-inventory-date').html();
+        var productDesc = $(this).parent().siblings('.tbl-product-desc').html();
+        var productPrice = $(this).parent().siblings('.tbl-product-price').html();
+        var productQuantity = $(this).parent().siblings('.tbl-product-quantity').html();
+        console.log('productDetails ',{productName, inventoryDate, productDesc, productPrice, productQuantity});
+
+        
+        // $('#editProductForm').html(response);
+        // $('#editProductForm').attr('action', `${window.location.href}/products/${productId}`);
+        $('#editProductProductName').val(productName);
+        $('#editProductInventoryDate').val(inventoryDate);
+        $('#editProductProductDesc').val(productDesc);
+        $('#editProductProductPrice').val(productPrice);
+        $('#editProductProductQuantity').val(productQuantity);
+
+        // $.ajax({
+        //     url: '/products/' + productId + '/edit',
+        //     type: 'GET',
+        //     success: function(response) {
+        //         // Populate the modal content with the fetched data
+        //         $('#editProductForm').html(response);
+        //         $('#editProductInventoryDate').val(response.InventoryDate);
+        //         $('#editProductProductName').val(response.ProductName);
+        //         $('#editProductProductDesc').val(response.ProductDesc);
+        //         $('#editProductProductPrice').val(response.ProductPrice);
+        //         $('#editProductProductQuantity').val(response.ProductQuantity);
                 
-            },
-            error: function(xhr, status, error) {
-                // Handle the error
-                console.log(error);
-            }
-        });
+        //     },
+        //     error: function(xhr, status, error) {
+        //         // Handle the error
+        //         console.log(error);
+        //     }
+        // });
         // Show the modal
         $('#editProductModal').modal('show');
     });
 });
 </script>
+@endpush
 
 @endsection

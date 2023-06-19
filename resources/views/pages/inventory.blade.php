@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Product Interface
+    <h1>List of Products
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Add Product</button>
     </h1>
     
@@ -39,7 +39,7 @@
                             @method('GET')
                             <button type="submit" class="btn btn-primary edit-btn">Edit</button>
                         </form> --}}
-                        <button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#editProductModal" data-product-id="{{ $product->ProductID }}" onclick="{{ $selectedProduct = $product->ProductID }}">Edit{{ $product->ProductID }}</button>
+                        <button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#editProductModal" data-product-id="{{ $product->ProductID }}" onclick="{{ $selectedProduct = $product->ProductID }}">Edit</button>
                         <form method="POST" style="display: inline;" action="{{ route('products.destroy', ['product' => $product->ProductID]) }}">
                             @csrf
                             @method('DELETE')
@@ -188,7 +188,7 @@ aria-hidden="true">
         //     }
         // });
         // Show the modal
-        $('#editProductModal').modal('show');
+        // $('#editProductModal').modal('show');
     });
 });
 </script>

@@ -61,6 +61,11 @@
                             <p>{{ __('Payment') }}</p>
                         </a>
                     </li>
+                    <li>
+                        <a class="nav-link" href="{{ url('/sales') }}">
+                            <p>{{ __('Sales') }}</p>
+                        </a>
+                    </li>
                     <!-- Add more navigation links as needed -->
                 </ul>
 
